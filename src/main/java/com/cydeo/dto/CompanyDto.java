@@ -1,4 +1,4 @@
 package com.cydeo.dto;
 
-public class Company {
+public class CompanyDto {
 }
