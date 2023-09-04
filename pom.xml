@@ -9,10 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.cydeo</groupId>
-    <artifactId>my_accounting_project</artifactId>
+    <artifactId>accounting-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>my_accounting_project</name>
-    <description>my_accounting_project</description>
+    <name>accounting-service-application</name>
+    <description>accounting-service-application</description>
+    <developers></developers>
     <properties>
         <java.version>11</java.version>
     </properties>
