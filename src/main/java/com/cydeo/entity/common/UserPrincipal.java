@@ -44,7 +44,11 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; } //!user.getCompany().getCompanyStatus().equals(CompanyStatus.PASSIVE);}
+
+//        return !user.getCompany().getCompanyStatus().equals(CompanyStatus.PASSIVE);
+        return true;
+    }
+
 
     @Override
     public boolean isCredentialsNonExpired() {
@@ -72,9 +76,11 @@ public class UserPrincipal implements UserDetails {
      *
      * @return The title of logged-in user's Company in String
      */
+
 /*
     public String getCompanyTitleForProfile() {
         return this.user.getCompany().getTitle().toUpperCase();
     }
 */
+
 }
