@@ -19,7 +19,7 @@ public class Company extends BaseEntity {
 
     private String title;
 
-    private String phoneNumber;
+    private String phone;
 
     private String website;
 
