@@ -18,9 +18,10 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
         this.mapperUtil = mapperUtil;
     }
+
     @Override
-    public ProductDto findByProductName(String productName) {
-       Product product = productRepository.findProductBy(productName).orElseThrow(() -> new NoSuchElementException("Product is not available"));
-       return mapperUtil.convert(product, new ProductDto());
+    public ProductDto findByProductById(Long productID) {
+        Product product = productRepository.findById(productID).orElseThrow(() -> new NoSuchElementException("Product is not available"));
+        return mapperUtil.convert(product, new ProductDto());
     }
 }

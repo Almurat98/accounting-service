@@ -4,5 +4,5 @@ import com.cydeo.dto.ProductDto;
 
 public interface ProductService {
 
-    ProductDto findByProductName(String productName);
+    ProductDto findByProductById(Long productID);
 }

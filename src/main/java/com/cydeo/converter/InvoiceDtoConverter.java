@@ -25,9 +25,6 @@ public class InvoiceDtoConverter implements Converter<String, InvoiceDto> {
         if (source == null || source.equals("")) {
             return null;
         }
-
         return invoiceService.findById(Long.parseLong(source));
-
     }
-
 }
