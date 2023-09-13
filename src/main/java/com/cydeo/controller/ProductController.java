@@ -11,18 +11,18 @@ public class ProductController {
 
     @GetMapping("/list")
     public String listOfProducts(Model model) {
-        return "/product-list";
+        return "product/product-list";
     }
 
     @GetMapping("/create")
     public String createProduct(Model model) {
 
-        return "/product-create";
+        return "product/product-create";
     }
 
     @GetMapping("update")
     public String updateProduct(Model model) {
-        return "/product-update";
+        return "product/product-update";
     }
 
 }
