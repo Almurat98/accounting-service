@@ -1,5 +1,6 @@
 package com.cydeo.controller;
 
+import com.cydeo.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,18 +12,16 @@ public class ProductController {
 
     @GetMapping("/list")
     public String listOfProducts(Model model) {
-        return "product/product-list";
+        return "/product/product-list";
     }
 
     @GetMapping("/create")
     public String createProduct(Model model) {
-
-        return "product/product-create";
+        return "/product/product-create";
     }
 
-    @GetMapping("update")
+    @GetMapping("/update")
     public String updateProduct(Model model) {
-        return "product/product-update";
+        return "/product/product-update";
     }
-
 }
