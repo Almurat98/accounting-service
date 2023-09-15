@@ -19,6 +19,6 @@ public class Category extends BaseEntity {
     private String description;
 
     @JoinColumn(name = "company_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 }
