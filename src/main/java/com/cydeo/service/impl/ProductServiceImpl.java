@@ -32,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll().stream().map(product -> mapperUtil.convert(product, new ProductDto())).collect(Collectors.toList());
     }
 
+
     @Override
     public void create(ProductDto dto) {
         productRepository.save(mapperUtil.convert(dto, new Product()));
@@ -51,6 +52,6 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long productId) {
         Optional<Product> productFound = productRepository.findById(productId);
         productFound.ifPresent(product -> product.setIsDeleted(true));
-        productRepository.save(productFound.get());
+        productRepository.delete(productFound.get());
     }
 }

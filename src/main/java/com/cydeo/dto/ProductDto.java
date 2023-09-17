@@ -1,12 +1,10 @@
 package com.cydeo.dto;
 
 import com.cydeo.enums.ProductUnit;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class ProductDto {
 
@@ -20,5 +18,12 @@ public class ProductDto {
     private CategoryDto category;
     private boolean hasProduct;
 
-
+    public ProductDto( String name, Integer quantityInStock, Integer lowLimitAlert, ProductUnit productUnit, CategoryDto category, boolean hasProduct) {
+        this.name = name;
+        this.quantityInStock = quantityInStock;
+        this.lowLimitAlert = lowLimitAlert;
+        this.productUnit = productUnit;
+        this.category = category;
+        this.hasProduct = hasProduct;
+    }
 }
