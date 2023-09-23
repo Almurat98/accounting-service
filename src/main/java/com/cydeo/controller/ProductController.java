@@ -8,7 +8,6 @@ import com.cydeo.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -37,14 +36,13 @@ public class ProductController {
     @GetMapping("/create")
     public String createProduct(Model model) {
         model.addAttribute("newProduct", new ProductDto());
-        model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("productUnits", productUnits);
         return "/product/product-create";
     }
 
     @PostMapping("/create")
-    public String insertProduct(@Validated @ModelAttribute("newProduct") ProductDto product, @Validated @ModelAttribute CategoryDto category, BindingResult bindingResult, Model model){
+    public String insertProduct(@ModelAttribute("newProduct") ProductDto product, @ModelAttribute CategoryDto category, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()) {
             model.addAttribute("products", productService.getAllProducts());
             model.addAttribute("categories", categoryService.getAllCategories());
@@ -58,18 +56,26 @@ public class ProductController {
 
     @GetMapping("/update/{productCode}")
     public String editProduct(@PathVariable("productCode") String productCode, Model model) {
-        model.addAttribute("product", productService.findByProductById(Long.parseLong(productCode)));
-        model.addAttribute("products", productService.getAllProducts());
+        model.addAttribute("product", productService.findProductById(Long.parseLong(productCode)));
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("productUnits", productUnits);
         return "/product/product-update";
     }
-    @PostMapping("/update/{product}")
-    public String updateProduct(@PathVariable("product") String product, ProductDto productD){
-        productService.update(productD);
+    @PostMapping("/update/{productCode}")
+    public String updateProduct(@ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("productUnits", productUnits);
+        }
+
+        productService.update(productDto);
         return "redirect:/product/product-update";
     }
 
     @GetMapping("delete/{productId}")
-    public String deleteProduct(@PathVariable("productId") Long productId){
+    public String deleteProduct(@PathVariable("productId") Long productId, Model model){
+        model.addAttribute("product", productService.findProductById(productId));
         productService.delete(productId);
         return "redirect:/product/product-list";
     }

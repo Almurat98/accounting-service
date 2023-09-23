@@ -22,6 +22,6 @@ public class ProductDTOConverter implements Converter<String, ProductDto> {
         if (source == null || source.equals("")) {
             return null;
         }
-        return productService.findByProductById(Long.parseLong(source));
+        return productService.findProductById(Long.parseLong(source));
     }
 }

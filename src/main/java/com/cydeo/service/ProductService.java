@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    ProductDto findByProductById(Long productID);
+    ProductDto findProductById(Long productID);
 
     List<ProductDto> getAllProducts();
     void create(ProductDto dto);
