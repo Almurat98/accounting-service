@@ -1,5 +1,6 @@
 package com.cydeo.entity.common;
 
+import com.cydeo.entity.Company;
 import com.cydeo.entity.User;
 import com.cydeo.enums.CompanyStatus;
 import org.springframework.context.annotation.Lazy;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class UserPrincipal implements UserDetails {
 
@@ -77,10 +79,12 @@ public class UserPrincipal implements UserDetails {
      * @return The title of logged-in user's Company in String
      */
 
-/*
     public String getCompanyTitleForProfile() {
-        return this.user.getCompany().getTitle().toUpperCase();
+        return Optional.ofNullable(user)
+                .map(User::getCompany)
+                .map(Company::getTitle)
+                .map(String::toUpperCase)
+                .orElse("");
     }
-*/
 
 }
