@@ -48,4 +48,10 @@ public class CategoryServiceImpl implements CategoryService {
         categoryFound.ifPresent(category -> category.setIsDeleted(true));
         categoryRepository.save(categoryFound.get());
     }
+
+
+    @Override
+    public CategoryDto getCategoryById(Long id) {
+        return mapperUtil.convert(categoryRepository.findById(id), new CategoryDto());
+    }
 }
