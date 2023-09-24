@@ -28,7 +28,7 @@ public class Company extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
-    private Company company;
+    private Address address;
 
 
 
