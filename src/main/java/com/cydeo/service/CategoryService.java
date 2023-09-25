@@ -13,4 +13,6 @@ public interface CategoryService {
     void delete(Long id);
 
     CategoryDto getCategoryById(Long id);
+    List<CategoryDto> getAllCategoriesForCurrentCompany();
+
 }

@@ -29,14 +29,14 @@ public class ProductController {
     @GetMapping("/list")
     public String listOfProducts(Model model) {
         model.addAttribute("product", new ProductDto());
-        model.addAttribute("products", productService.getAllProducts());
+        model.addAttribute("products", productService.getAllProductsForCurrentCompany());
         return "/product/product-list";
     }
 
     @GetMapping("/create")
     public String createProduct(Model model) {
         model.addAttribute("newProduct", new ProductDto());
-        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
         model.addAttribute("productUnits", productUnits);
         return "/product/product-create";
     }
@@ -54,13 +54,14 @@ public class ProductController {
             return "redirect:/product/product-list";
         }
 
-    @GetMapping("/update/{productCode}")
-    public String editProduct(@PathVariable("productCode") String productCode, Model model) {
-        model.addAttribute("product", productService.findProductById(Long.parseLong(productCode)));
-        model.addAttribute("categories", categoryService.getAllCategories());
+    @GetMapping("/update/{productId}")
+    public String editProduct(@PathVariable("productId") Long id, Model model) {
+        model.addAttribute("product", productService.findProductById(id));
+        model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
         model.addAttribute("productUnits", productUnits);
         return "/product/product-update";
     }
+
     @PostMapping("/update/{productCode}")
     public String updateProduct(@ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
 

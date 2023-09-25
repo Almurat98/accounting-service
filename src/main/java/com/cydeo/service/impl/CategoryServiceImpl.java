@@ -1,10 +1,13 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.CategoryDto;
+import com.cydeo.dto.ProductDto;
 import com.cydeo.entity.Category;
+import com.cydeo.entity.Product;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.CategoryRepository;
 import com.cydeo.service.CategoryService;
+import com.cydeo.service.SecurityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +20,12 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil) {
+    private final SecurityService securityService;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, SecurityService securityService) {
         this.categoryRepository = categoryRepository;
         this.mapperUtil = mapperUtil;
+        this.securityService = securityService;
     }
 
     @Override
@@ -53,5 +59,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategoryById(Long id) {
         return mapperUtil.convert(categoryRepository.findById(id), new CategoryDto());
+    }
+
+    @Override
+    public List<CategoryDto> getAllCategoriesForCurrentCompany() {
+
+        Long companyId = securityService.getLoggedInUser().getCompany().getId();
+        List<Category> listByCompany = categoryRepository.findAllByCompanyId(companyId);
+        return listByCompany.stream().map(category -> mapperUtil.convert(category, new CategoryDto())).collect(Collectors.toList());
+
     }
 }

@@ -4,6 +4,7 @@ import com.cydeo.entity.Product;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.ProductRepository;
 import com.cydeo.service.ProductService;
+import com.cydeo.service.SecurityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +18,13 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final MapperUtil mapperUtil;
 
-    public ProductServiceImpl(ProductRepository productRepository, MapperUtil mapperUtil) {
+    private final SecurityService securityService;
+
+
+    public ProductServiceImpl(ProductRepository productRepository, MapperUtil mapperUtil, SecurityService securityService) {
         this.productRepository = productRepository;
         this.mapperUtil = mapperUtil;
+        this.securityService = securityService;
     }
 
     @Override
@@ -32,6 +37,12 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll().stream().map(product -> mapperUtil.convert(product, new ProductDto())).collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductDto> getAllProductsForCurrentCompany() {
+        Long companyId = securityService.getLoggedInUser().getCompany().getId();
+        List<Product> listByCompany = productRepository.findAllByCategoryCompanyIdOrderByCategoryAscNameAsc(companyId);
+        return listByCompany.stream().map(product -> mapperUtil.convert(product, new ProductDto())).collect(Collectors.toList());
+    }
 
     @Override
     public void create(ProductDto dto) {
