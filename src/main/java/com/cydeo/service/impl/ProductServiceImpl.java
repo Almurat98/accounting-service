@@ -47,15 +47,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void create(ProductDto dto) {
-        productRepository.save(mapperUtil.convert(dto, new Product()));
+
+        Product newProduct = mapperUtil.convert(dto, new Product());
+        newProduct.setInsertDateTime(LocalDateTime.now());
+        newProduct.setInsertUserId(securityService.getLoggedInUser().getCompany().getId());
+        newProduct.setLastUpdateDateTime(LocalDateTime.now());
+        newProduct.setLastUpdateUserId(securityService.getLoggedInUser().getCompany().getId());
+
+        productRepository.save(newProduct);
     }
 
     @Override
     public void update(ProductDto dto) {
         Optional<Product> product = productRepository.findById(dto.getId());
-        System.out.println( "product from DB"+product);
         Product convertedProduct = mapperUtil.convert(dto, new Product());
-        System.out.println("converted"+convertedProduct.toString());
+
         if(product.isPresent()){
             convertedProduct.setId(product.get().getId());
             convertedProduct.setInsertDateTime(product.get().insertDateTime);

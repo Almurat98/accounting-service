@@ -42,41 +42,37 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String insertProduct(@ModelAttribute("newProduct") ProductDto product, @ModelAttribute CategoryDto category, BindingResult bindingResult, Model model){
+    public String insertProduct(@ModelAttribute("newProduct") ProductDto productDto, BindingResult bindingResult, Model model){
+
         if(bindingResult.hasErrors()) {
-            model.addAttribute("products", productService.getAllProducts());
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("productUnits", productUnits);
-            return "/product/product-create";
+            return "redirect:/product/product-create";
         }
-            productService.create(product);
-            categoryService.create(category);
-            return "redirect:/product/product-list";
+            productService.create(productDto);
+            model.addAttribute("products", productService.getAllProductsForCurrentCompany());
+            return "/product/product-list";
         }
 
-    @GetMapping("/update/{productId}")
-    public String editProduct(@PathVariable("productId") Long id, Model model) {
+    @GetMapping("/update/{id}")
+    public String editProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.findProductById(id));
         model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
         model.addAttribute("productUnits", productUnits);
         return "/product/product-update";
     }
 
-    @PostMapping("/update/{productId}")
-    public String updateProduct(@PathVariable("productId")Long id, @ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
+    @PostMapping("/update/{id}")
+    public String updateProduct(@PathVariable("id")Long id, @ModelAttribute("product") ProductDto product, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
-            System.out.println("errors here");
             model.addAttribute("product", productService.findProductById(id));
             model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
             model.addAttribute("productUnits", productUnits);
             return "product/product-update";
         }
 
-        System.out.println("start update");
-        System.out.println(productDto.toString());
-
-        productService.update(productDto);
+        productService.update(product);
         model.addAttribute("products", productService.getAllProductsForCurrentCompany());
         return "/product/product-list";
     }
