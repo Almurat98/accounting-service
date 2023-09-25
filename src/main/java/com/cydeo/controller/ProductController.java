@@ -62,15 +62,21 @@ public class ProductController {
         return "/product/product-update";
     }
 
-    @PostMapping("/update/{productCode}")
-    public String updateProduct(@ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
+    @PostMapping("/update/{productId}")
+    public String updateProduct(@PathVariable("productId")Long id, @ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("categories", categoryService.getAllCategories());
+            System.out.println("errors here");
+            model.addAttribute("product", productService.findProductById(id));
+            model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
             model.addAttribute("productUnits", productUnits);
         }
 
+        System.out.println("start update");
+        System.out.println(productDto.toString());
+
         productService.update(productDto);
+        model.addAttribute("products", productService.getAllProductsForCurrentCompany());
         return "redirect:/product/product-update";
     }
 

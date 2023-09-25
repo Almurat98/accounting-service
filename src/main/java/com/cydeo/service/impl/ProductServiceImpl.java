@@ -7,6 +7,7 @@ import com.cydeo.service.ProductService;
 import com.cydeo.service.SecurityService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto findProductById(Long productID) {
-        return mapperUtil.convert(productRepository.findById(productID).get(), new ProductDto());
+        return mapperUtil.convert(productRepository.findById(productID), new ProductDto());
     }
 
     @Override
@@ -52,9 +53,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void update(ProductDto dto) {
         Optional<Product> product = productRepository.findById(dto.getId());
+        System.out.println( "product from DB"+product);
         Product convertedProduct = mapperUtil.convert(dto, new Product());
+        System.out.println("converted"+convertedProduct.toString());
         if(product.isPresent()){
             convertedProduct.setId(product.get().getId());
+            convertedProduct.setInsertDateTime(product.get().insertDateTime);
+            convertedProduct.setInsertUserId(product.get().insertUserId);
+            convertedProduct.setLastUpdateDateTime(LocalDateTime.now());
+            convertedProduct.setLastUpdateUserId(securityService.getLoggedInUser().getCompany().getId());
+
             productRepository.save(convertedProduct);
         }
     }
