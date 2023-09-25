@@ -28,7 +28,7 @@ public class ProductController {
 
     @GetMapping("/list")
     public String listOfProducts(Model model) {
-        model.addAttribute("product", new ProductDto());
+//        model.addAttribute("product", new ProductDto());
         model.addAttribute("products", productService.getAllProductsForCurrentCompany());
         return "/product/product-list";
     }
@@ -70,6 +70,7 @@ public class ProductController {
             model.addAttribute("product", productService.findProductById(id));
             model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
             model.addAttribute("productUnits", productUnits);
+            return "product/product-update";
         }
 
         System.out.println("start update");
@@ -77,7 +78,7 @@ public class ProductController {
 
         productService.update(productDto);
         model.addAttribute("products", productService.getAllProductsForCurrentCompany());
-        return "redirect:/product/product-update";
+        return "/product/product-list";
     }
 
     @GetMapping("delete/{productId}")
