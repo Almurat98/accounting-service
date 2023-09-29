@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getAllProductsForCurrentCompany() {
         Long companyId = securityService.getLoggedInUser().getCompany().getId();
-        List<Product> listByCompany = productRepository.findAllByCategoryCompanyIdOrderByCategoryAscNameAsc(companyId);
+        List<Product> listByCompany = productRepository.getAllNotDeletedProductsForCompany(companyId);
         return listByCompany.stream().map(product -> mapperUtil.convert(product, new ProductDto())).collect(Collectors.toList());
     }
 
@@ -75,8 +75,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Long productId) {
-        Optional<Product> productFound = productRepository.findById(productId);
-        productFound.ifPresent(product -> product.setIsDeleted(true));
-        productRepository.delete(productFound.get());
+          Optional<Product> productFound = productRepository.findById(productId);
+          productFound.ifPresent(product -> {
+                            product.setIsDeleted(true);
+                            productRepository.save(product);
+          });
     }
 }

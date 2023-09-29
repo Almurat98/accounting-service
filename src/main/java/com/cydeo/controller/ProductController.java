@@ -79,8 +79,9 @@ public class ProductController {
 
     @GetMapping("delete/{productId}")
     public String deleteProduct(@PathVariable("productId") Long productId, Model model){
-        model.addAttribute("product", productService.findProductById(productId));
+
         productService.delete(productId);
-        return "redirect:/product/product-list";
+        model.addAttribute("products", productService.getAllProductsForCurrentCompany());
+        return "/product/product-list";
     }
 }
