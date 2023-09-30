@@ -1,9 +1,7 @@
 package com.cydeo.entity;
 
 import com.cydeo.entity.common.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -14,6 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Getter
+@Setter
 @Where(clause = "is_deleted = false")
 public class InvoiceProduct extends BaseEntity {
 
