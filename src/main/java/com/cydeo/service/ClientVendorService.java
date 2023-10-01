@@ -10,4 +10,13 @@ public interface ClientVendorService {
 
     List<ClientVendorDto> findAllVendorNames();
 
+    List<ClientVendorDto> listClientVendorDetails();
+
+    ClientVendorDto findById(Long id);
+
+    void update(ClientVendorDto clientVendorDto);
+
+    void deleteById(Long id);
+
+    void save(ClientVendorDto clientVendorDto);
 }
