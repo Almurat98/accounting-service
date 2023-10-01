@@ -1,13 +1,14 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.CategoryDto;
-import com.cydeo.dto.ProductDto;
 import com.cydeo.entity.Category;
-import com.cydeo.entity.Product;
+import com.cydeo.entity.Company;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.CategoryRepository;
 import com.cydeo.service.CategoryService;
+import com.cydeo.service.CompanyService;
 import com.cydeo.service.SecurityService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,17 +16,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
 
     private final SecurityService securityService;
+    private final CompanyService companyService;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, SecurityService securityService) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, SecurityService securityService, CompanyService companyService) {
         this.categoryRepository = categoryRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+        this.companyService = companyService;
     }
 
     @Override
@@ -35,7 +39,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void create(CategoryDto dto) {
-        categoryRepository.save(mapperUtil.convert(dto, new Category()));
+        Category newCategory = mapperUtil.convert(dto, new Category());
+        Long companyId = securityService.getLoggedInUser().getCompany().getId();
+        Company currentCompany = mapperUtil.convert(companyService.findById(companyId),new Company());
+        newCategory.setCompany(currentCompany);
+        categoryRepository.save(newCategory);
+        log.info("Category created for categoryId : " + newCategory.getId());
     }
 
     @Override
