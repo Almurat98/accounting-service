@@ -1,10 +1,14 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.InvoiceProductDto;
+import com.cydeo.entity.InvoiceProduct;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.InvoiceProductRepository;
 import com.cydeo.service.InvoiceProductService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InvoiceProductServiceImpl implements InvoiceProductService {
@@ -23,4 +27,16 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     }
 
+    /**
+     * Finds all InvoiceProducts from dB, and converts into DTO
+     *
+     * @returns List of InvoiceProducts
+     */
+    @Override
+    public List<InvoiceProductDto> findAll() {
+        List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findAll();
+        return invoiceProductList.stream()
+                .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDto()))
+                .collect(Collectors.toList());
+    }
 }
