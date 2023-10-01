@@ -25,4 +25,5 @@ public class ClientVendorDto {
     CompanyDto company;
 
     boolean hasInvoice;
+
 }
