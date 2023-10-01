@@ -28,55 +28,60 @@ public class ProductController {
 
     @GetMapping("/list")
     public String listOfProducts(Model model) {
-        model.addAttribute("product", new ProductDto());
-        model.addAttribute("products", productService.getAllProducts());
+//        model.addAttribute("product", new ProductDto());
+        model.addAttribute("products", productService.getAllProductsForCurrentCompany());
         return "/product/product-list";
     }
 
     @GetMapping("/create")
     public String createProduct(Model model) {
         model.addAttribute("newProduct", new ProductDto());
-        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
         model.addAttribute("productUnits", productUnits);
         return "/product/product-create";
     }
 
     @PostMapping("/create")
-    public String insertProduct(@ModelAttribute("newProduct") ProductDto product, @ModelAttribute CategoryDto category, BindingResult bindingResult, Model model){
+    public String insertProduct(@ModelAttribute("newProduct") ProductDto productDto, BindingResult bindingResult, Model model){
+
         if(bindingResult.hasErrors()) {
-            model.addAttribute("products", productService.getAllProducts());
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("productUnits", productUnits);
-            return "/product/product-create";
+            return "redirect:/product/product-create";
         }
-            productService.create(product);
-            categoryService.create(category);
-            return "redirect:/product/product-list";
+            productService.create(productDto);
+            model.addAttribute("products", productService.getAllProductsForCurrentCompany());
+            return "/product/product-list";
         }
 
-    @GetMapping("/update/{productCode}")
-    public String editProduct(@PathVariable("productCode") String productCode, Model model) {
-        model.addAttribute("product", productService.findProductById(Long.parseLong(productCode)));
-        model.addAttribute("categories", categoryService.getAllCategories());
+    @GetMapping("/update/{id}")
+    public String editProduct(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("product", productService.findProductById(id));
+        model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
         model.addAttribute("productUnits", productUnits);
         return "/product/product-update";
     }
-    @PostMapping("/update/{productCode}")
-    public String updateProduct(@ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
+
+    @PostMapping("/update/{id}")
+    public String updateProduct(@PathVariable("id")Long id, @ModelAttribute("product") ProductDto product, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("product", productService.findProductById(id));
+            model.addAttribute("categories", categoryService.getAllCategoriesForCurrentCompany());
             model.addAttribute("productUnits", productUnits);
+            return "product/product-update";
         }
 
-        productService.update(productDto);
-        return "redirect:/product/product-update";
+        productService.update(product);
+        model.addAttribute("products", productService.getAllProductsForCurrentCompany());
+        return "/product/product-list";
     }
 
     @GetMapping("delete/{productId}")
     public String deleteProduct(@PathVariable("productId") Long productId, Model model){
-        model.addAttribute("product", productService.findProductById(productId));
+
         productService.delete(productId);
-        return "redirect:/product/product-list";
+        model.addAttribute("products", productService.getAllProductsForCurrentCompany());
+        return "/product/product-list";
     }
 }
